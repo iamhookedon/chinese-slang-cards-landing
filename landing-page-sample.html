@@ -43,20 +43,127 @@
     background:var(--red);color:#fff;border:none;border-radius:999px;
     padding:14px 32px;font-size:15px;cursor:pointer;
   }
-  .card-mock{
-    width:280px;background:#fff;border-radius:20px;padding:32px;
-    box-shadow:0 12px 40px rgba(0,0,0,0.08);text-align:center;
+  /* 플립 카드 */
+  .flip-wrap{
+    flex-shrink:0;width:260px;height:400px;
+    perspective:1000px;cursor:pointer;
   }
-  .card-mock .hanzi{font-size:48px;margin-bottom:8px;}
-  .card-mock .pinyin{color:var(--red);font-size:15px;margin-bottom:6px;}
-  .card-mock .meaning{font-size:14px;color:#5b5a57;}
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.4,0,.2,1);
+  }
+  .flip-wrap.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front,.flip-back{
+    position:absolute;inset:0;
+    border-radius:20px;padding:28px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.10);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    display:flex;flex-direction:column;
+    font-family:'Segoe UI','Microsoft YaHei','微软雅黑','Noto Sans SC',sans-serif;
+  }
+  /* 앞면 */
+  .flip-front{
+    background:#fff;
+    align-items:center;justify-content:center;text-align:center;
+  }
+  .flip-front .card-tag{
+    background:var(--red-soft);color:var(--red);
+    font-size:11px;border-radius:999px;padding:3px 12px;margin-bottom:20px;
+  }
+  .flip-front .card-hanzi{
+    font-size:64px;line-height:1;margin-bottom:12px;
+    font-family:'Microsoft YaHei','微软雅黑','Noto Serif SC',serif;
+    white-space:nowrap;
+  }
+  .flip-front .card-tts{
+    background:none;border:none;font-size:20px;cursor:pointer;margin-bottom:4px;
+  }
+  .flip-front .card-pinyin{color:var(--red);font-size:15px;margin-bottom:10px;letter-spacing:.5px;}
+  .flip-front hr{width:40px;border:none;border-top:1.5px solid #eee;margin:0 auto 12px;}
+  .flip-front .card-meaning{font-size:14px;color:#3d3d3d;margin-bottom:10px;line-height:1.6;}
+  .flip-front .card-origin-hint{
+    font-size:12px;color:#9b9895;
+    background:#f5f4f2;border-radius:10px;padding:8px 12px;line-height:1.5;
+  }
+  .flip-front .card-hint{font-size:11px;color:#bbb;margin-top:auto;padding-top:16px;}
+  /* 뒷면 */
+  .flip-back{
+    background:#2B2A28;color:#f0ede9;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .flip-back .back-header{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:16px;
+  }
+  .flip-back .back-label{
+    background:var(--red);color:#fff;
+    font-size:10px;border-radius:999px;padding:3px 10px;
+  }
+  .flip-back .back-word{font-size:13px;color:#9b9895;font-family:'Microsoft YaHei','微软雅黑',serif;}
+  .flip-back .section-label{
+    font-size:10px;font-weight:700;letter-spacing:1px;
+    color:var(--red);margin-bottom:6px;margin-top:14px;
+  }
+  .flip-back .section-box{
+    background:rgba(255,255,255,0.07);border-radius:12px;
+    padding:12px;font-size:12px;line-height:1.7;color:#e0ddd9;
+  }
+  .flip-back .example-cn{font-size:13px;margin-bottom:4px;}
+  .flip-back .example-ko{font-size:11px;color:#9b9895;}
+  .flip-back .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .flip-back .chip{
+    background:rgba(200,57,44,0.2);color:#ff9d94;
+    font-size:11px;border-radius:999px;padding:2px 10px;
+  }
+  .flip-back .back-btn{
+    margin-top:16px;background:none;border:1px solid #555;
+    color:#aaa;border-radius:999px;padding:6px 16px;font-size:11px;cursor:pointer;
+    align-self:flex-start;
+  }
+  .flip-back .tts-btn{
+    background:none;border:none;color:#aaa;font-size:16px;cursor:pointer;margin-right:4px;
+  }
+
+  /* 모바일 반응형 */
+  @media(max-width:768px){
+    header{padding:20px 24px;}
+    .hero{
+      flex-direction:column;align-items:flex-start;
+      padding:48px 24px;gap:32px;
+    }
+    .hero-text h1{font-size:28px;}
+    .flip-wrap{width:100%;}
+    section.compare{padding:48px 24px;}
+    .compare-grid{flex-direction:column;gap:16px;}
+    footer.cta{padding:64px 24px;}
+    footer.cta h2{font-size:22px;}
+  }
   .tag{
     display:inline-block;background:var(--red-soft);color:var(--red);
     font-size:12px;border-radius:999px;padding:4px 12px;margin-bottom:16px;
   }
   section.compare{
-    padding:80px 64px;background:#fff;
+    position:relative;overflow:hidden;
+    padding:80px 64px;
   }
+  section.compare::before{
+    content:'';
+    position:absolute;inset:0;
+    background-image:url('great-wall.jpg');
+    background-size:cover;background-position:center;
+    filter:blur(2px) saturate(0.7);
+    transform:scale(1.03);
+    z-index:0;
+  }
+  section.compare::after{
+    content:'';
+    position:absolute;inset:0;
+    background:rgba(250,247,244,0.55);
+    z-index:0;
+  }
+  section.compare > *{position:relative;z-index:1;}
   section.compare h2{
     text-align:center;font-size:28px;margin-bottom:48px;
   }
@@ -80,13 +187,74 @@
   }
   footer.cta h2{font-size:30px;margin-bottom:16px;}
   footer.cta p{color:#5b5a57;margin-bottom:32px;}
+
+  /* 모달 */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,0.45);z-index:999;
+    align-items:center;justify-content:center;
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:#fff;border-radius:24px;padding:40px 36px;
+    width:90%;max-width:400px;position:relative;
+    box-shadow:0 24px 60px rgba(0,0,0,0.15);
+  }
+  .modal-close{
+    position:absolute;top:16px;right:20px;
+    background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;
+  }
+  .modal h3{font-size:20px;margin-bottom:8px;}
+  .modal p{font-size:14px;color:#5b5a57;margin-bottom:24px;}
+  .modal label{font-size:13px;color:#5b5a57;display:block;margin-bottom:6px;}
+  .modal input{
+    width:100%;border:1.5px solid #e5e3e0;border-radius:12px;
+    padding:12px 16px;font-size:14px;margin-bottom:16px;outline:none;
+    transition:border .2s;
+  }
+  .modal input:focus{border-color:var(--red);}
+  .modal .modal-submit{
+    width:100%;background:var(--red);color:#fff;border:none;
+    border-radius:999px;padding:14px;font-size:15px;cursor:pointer;
+    margin-top:4px;
+  }
+  .modal .modal-note{font-size:11px;color:#bbb;text-align:center;margin-top:12px;}
+  /* 완료 메시지 */
+  .modal-done{display:none;text-align:center;padding:16px 0;}
+  .modal-done .done-icon{font-size:48px;margin-bottom:12px;}
+  .modal-done h3{font-size:18px;margin-bottom:8px;}
+  .modal-done p{font-size:14px;color:#5b5a57;}
 </style>
 </head>
 <body>
 
+<!-- 구독 모달 -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <!-- 폼 -->
+    <div id="modal-form">
+      <h3>무료 카드 받아보기 🎴</h3>
+      <p>매주 새로운 중국어 신조어 카드를<br>이메일로 무료로 보내드려요.</p>
+      <label>이름</label>
+      <input type="text" id="inp-name" placeholder="홍길동">
+      <label>이메일</label>
+      <input type="email" id="inp-email" placeholder="hello@example.com">
+      <button class="modal-submit" onclick="submitForm()">무료 구독 시작하기 →</button>
+      <p class="modal-note">스팸 없음 · 언제든 구독 취소 가능</p>
+    </div>
+    <!-- 완료 -->
+    <div class="modal-done" id="modal-done">
+      <div class="done-icon">🎉</div>
+      <h3>구독 완료!</h3>
+      <p>곧 첫 번째 카드가 도착할 거예요.<br>중국 SNS 트렌드, 기대해주세요.</p>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="logo accent">新词卡片</div>
-  <nav><button>무료 카드 받기</button></nav>
+  <nav><button onclick="openModal()">무료 카드 받기</button></nav>
 </header>
 
 <section class="hero">
@@ -94,34 +262,74 @@
     <span class="tag">중국 SNS 트렌드 학습 카드</span>
     <h1>요즘 중국에서<br>뜨는 말, <span class="hanzi accent">한 장</span>으로<br>끝내기</h1>
     <p>웨이보·샤오훙수·더우인 신조어를 한자·발음·뜻이 담긴 카드로 매주 무료로 받아보세요. 더 깊이 알고 싶다면 유래와 예문까지, 유료 구독으로.</p>
-    <button class="cta-primary">무료 카드 받아보기 →</button>
+    <button class="cta-primary" onclick="openModal()">무료 카드 받아보기 →</button>
   </div>
-  <div class="card-mock">
-    <div class="hanzi">绝绝子</div>
-    <div class="pinyin">jué jué zǐ</div>
-    <div class="meaning">정말 최고다 / 대박이다<br><span style="color:#bbb">— 무료 카드 (앞면)</span></div>
+  <div class="flip-wrap" id="card" onclick="document.getElementById('card').classList.toggle('flipped')">
+    <div class="flip-inner">
+      <!-- 앞면 -->
+      <div class="flip-front">
+        <span class="card-tag">🔥 SNS 유행어</span>
+        <div class="card-hanzi" id="card-hanzi">绝绝子</div>
+        <button class="card-tts" onclick="event.stopPropagation();speak('绝绝子')" title="발음 듣기">🔊</button>
+        <div class="card-pinyin">juéjuézǐ</div>
+        <hr>
+        <div class="card-meaning">정말 최고다 / 완전 대박이다</div>
+        <div class="card-origin-hint">✦ '绝' (최고·극도)를 겹쳐 강조한 뒤 '子'로 귀엽게 — 더우인에서 유행</div>
+        <div class="card-hint">탭하면 뒷면 보기 →</div>
+      </div>
+      <!-- 뒷면 -->
+      <div class="flip-back">
+        <div class="back-header">
+          <span class="back-label">PREMIUM</span>
+          <span class="back-word">绝绝子</span>
+        </div>
+        <div class="section-label">ORIGIN — 유래 상세</div>
+        <div class="section-box">
+          <strong>绝</strong>(절정·극도)를 반복하고 구어체 접미사 <strong>子</strong>를 붙여 귀엽고 강한 감탄을 만든 신조어. 2021년경 더우인(TikTok 중국판)에서 폭발적으로 퍼졌다 (발생 시점 추정).
+        </div>
+        <div class="section-label">EXAMPLE — 실전 예문</div>
+        <div class="section-box">
+          <div>
+            <button class="tts-btn" onclick="event.stopPropagation();speak('这个蛋糕真的绝绝子！')" title="발음 듣기">🔊</button>
+            <span class="example-cn">这个蛋糕真的绝绝子！</span>
+          </div>
+          <div class="example-ko">이 케이크 진짜 완전 최고야!</div>
+        </div>
+        <div class="section-label">REGISTER — 사용역</div>
+        <div class="section-box">
+          SNS·채팅에서 칭찬·감탄 표현으로 광범위하게 쓰임. 격식 자리엔 부적합.
+          <div class="chips">
+            <span class="chip">비격식</span>
+            <span class="chip">SNS·채팅</span>
+            <span class="chip">긍정 감탄</span>
+            <span class="chip">내수용</span>
+          </div>
+        </div>
+        <button class="back-btn" onclick="event.stopPropagation();document.getElementById('card').classList.remove('flipped')">← 앞면으로</button>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="compare">
-  <h2>무료 카드 <span style="color:var(--red);">vs</span> 유료 구독</h2>
+  <h2>카드 한 장, <span style="color:var(--red);">두 가지 깊이</span></h2>
   <div class="compare-grid">
     <div class="compare-card free">
-      <h3 class="hanzi">무료 — 카드 앞면</h3>
+      <h3 class="hanzi">가볍게 시작하기</h3>
       <ul>
-        <li>최신 유행 신조어</li>
-        <li>한자 표기</li>
-        <li>발음(병음)</li>
-        <li>기본 뜻 풀이</li>
+        <li>매주 새로운 SNS 유행어</li>
+        <li>한자 + 발음(병음)</li>
+        <li>한 줄 핵심 뜻</li>
+        <li>유래 힌트 한 줄</li>
       </ul>
     </div>
     <div class="compare-card paid">
-      <h3 class="hanzi">유료 — 카드 뒷면</h3>
+      <h3 class="hanzi">더 깊이 들여다보기</h3>
       <ul>
-        <li>뜻의 유래와 배경 설명</li>
-        <li>실생활 예문</li>
-        <li>예문 발음(병음)</li>
-        <li>뉘앙스·사용역 가이드</li>
+        <li>탄생 배경과 유래 상세</li>
+        <li>실전 예문 + 발음</li>
+        <li>뉘앙스와 사용 상황 가이드</li>
+        <li>비슷한 표현 모음</li>
       </ul>
     </div>
   </div>
@@ -130,8 +338,41 @@
 <footer class="cta">
   <h2>오늘의 신조어, 무료로 먼저 받아보세요</h2>
   <p>이메일만 남기면 매주 새로운 카드가 도착합니다.</p>
-  <button class="cta-primary">무료 구독 시작하기</button>
+  <button class="cta-primary" onclick="openModal()">무료 구독 시작하기</button>
 </footer>
 
+<script>
+function openModal(){
+  document.getElementById('modal').classList.add('active');
+  document.getElementById('modal-form').style.display='block';
+  document.getElementById('modal-done').style.display='none';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('active');
+}
+function submitForm(){
+  var name=document.getElementById('inp-name').value.trim();
+  var email=document.getElementById('inp-email').value.trim();
+  if(!name){alert('이름을 입력해주세요.');return;}
+  if(!email||!email.includes('@')){alert('이메일을 올바르게 입력해주세요.');return;}
+  document.getElementById('modal-form').style.display='none';
+  document.getElementById('modal-done').style.display='block';
+}
+function speak(text){
+  var url='https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q='+encodeURIComponent(text);
+  var a=new Audio(url);a.play();
+}
+// 헤더 한자 폰트 자동 맞춤
+function fitHanzi(){
+  var el=document.getElementById('card-hanzi');
+  if(!el)return;
+  var max=el.parentElement.clientWidth-80;
+  var size=64;
+  el.style.fontSize=size+'px';
+  while(el.scrollWidth>max&&size>22){size-=2;el.style.fontSize=size+'px';}
+}
+window.addEventListener('load',fitHanzi);
+window.addEventListener('resize',fitHanzi);
+</script>
 </body>
 </html>
